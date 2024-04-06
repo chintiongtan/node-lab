@@ -5,7 +5,6 @@ services:
     user: $DOCKER_USER
     environment:
       NPM_CONFIG_CACHE: /home/dev/.npm
-      NPM_TOKEN: $NPM_TOKEN
       YARN_CACHE_FOLDER: /home/dev/.yarn
     image: 'node:alpine-v18'
     ports:

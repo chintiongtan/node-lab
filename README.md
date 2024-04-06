@@ -16,6 +16,12 @@ This project contains a collection of Proof-of-Concept (POC) implementations usi
      export DOCKER_USER="$(id -u):$(id -g)"
      ```
 
+1. Build a custom image using the same user ID and group ID:
+
+   - ```bash
+     ./scripts/build.sh
+     ```
+
 1. Install the dependencies:
 
    - ```bash
