@@ -1,10 +1,20 @@
 import { CreateUserInput, User } from '../types/user';
 
 export default class UserRepository {
+  private static instance: UserRepository;
+
   private records: Array<User>;
 
-  constructor() {
+  private constructor() {
     this.records = [];
+  }
+
+  public static getInstance(): UserRepository {
+    if (!UserRepository.instance) {
+      UserRepository.instance = new UserRepository();
+    }
+
+    return UserRepository.instance;
   }
 
   public create(input: CreateUserInput): void {

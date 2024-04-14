@@ -2,10 +2,20 @@ import { Article, CreateArticleInput, Visibility } from '../types/article';
 import { UserSession } from '../types/userSession';
 
 export default class ArticleRepository {
+  private static instance: ArticleRepository;
+
   private records: Array<Article>;
 
-  constructor() {
+  private constructor() {
     this.records = [];
+  }
+
+  public static getInstance(): ArticleRepository {
+    if (!ArticleRepository.instance) {
+      ArticleRepository.instance = new ArticleRepository();
+    }
+
+    return ArticleRepository.instance;
   }
 
   public create(input: CreateArticleInput, userSession: UserSession): void {

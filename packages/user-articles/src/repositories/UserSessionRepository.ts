@@ -1,10 +1,20 @@
 import { CreateUserSessionInput, UserSession } from '../types/userSession';
 
 export default class UserSessionRepository {
+  private static instance: UserSessionRepository;
+
   private records: Array<UserSession>;
 
-  constructor() {
+  private constructor() {
     this.records = [];
+  }
+
+  public static getInstance(): UserSessionRepository {
+    if (!UserSessionRepository.instance) {
+      UserSessionRepository.instance = new UserSessionRepository();
+    }
+
+    return UserSessionRepository.instance;
   }
 
   public create(input: CreateUserSessionInput): void {
