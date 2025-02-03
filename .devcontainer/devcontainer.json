@@ -1,0 +1,20 @@
+{
+  "name": "Nodelab Dev Container",
+  "containerEnv": {
+		"GIT_EDITOR": "vim"
+	},
+  "customizations": {
+		"vscode": {
+			"extensions": [
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker"
+      ]
+		}
+	},
+  "dockerComposeFile": ["docker-compose.yml"],
+	"forwardPorts": [3000],
+  "service": "nodelab-devcontainer",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
+}
