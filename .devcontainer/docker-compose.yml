@@ -1,0 +1,20 @@
+services:
+  nodelab-devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sleep infinity
+    container_name: nodelab-devcontainer
+    image: nodelab-devcontainer
+    networks:
+      - nodelab
+    volumes:
+      - nodelab-devcontainer:/workspaces:cached
+
+networks:
+  nodelab:
+    driver: bridge
+
+volumes:
+  nodelab-devcontainer:
+    driver: local
