@@ -1,4 +1,3 @@
-import { beforeAll, describe, expect, test } from '@jest/globals';
 import UserSessionRepository from './UserSessionRepository';
 
 const userSessionRepository = UserSessionRepository.getInstance();
@@ -31,7 +30,7 @@ describe('UserSessionRepository', () => {
     const userSession = userSessionRepository.getUserSessionByToken('abc*123!');
 
     expect(userSession).toBeDefined();
-    expect(userSession.user_id).toBe('10001');
+    expect(userSession?.user_id).toBe('10001');
   });
 
   test('getUserSessionByToken should return undefined for non-matching token', () => {
