@@ -1,4 +1,3 @@
-import { describe, expect, test } from '@jest/globals';
 import UserRepository from './UserRepository';
 
 const userRepository = UserRepository.getInstance();
@@ -18,7 +17,7 @@ describe('UserRepository', () => {
     const user = userRepository.getUserByLogin('username@example.org');
 
     expect(user).toBeDefined();
-    expect(user.login).toEqual('username@example.org');
+    expect(user?.login).toEqual('username@example.org');
   });
 
   test('getUserByLogin should return undefined if not found', () => {

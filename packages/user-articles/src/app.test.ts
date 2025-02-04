@@ -1,4 +1,3 @@
-import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import request from 'supertest';
 import app from './app';
 import UserRepository from './repositories/UserRepository';
