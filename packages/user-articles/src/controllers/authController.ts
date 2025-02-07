@@ -30,7 +30,9 @@ export function login(req: Request, res: Response) {
 }
 
 export function logout(req: Request, res: Response) {
-  userSessionRepository.deleteUserSessionByToken(req.get(HEADER_AUTH) as string);
+  userSessionRepository.deleteUserSessionByToken(
+    req.get(HEADER_AUTH) as string,
+  );
 
   res.status(200).end();
 }

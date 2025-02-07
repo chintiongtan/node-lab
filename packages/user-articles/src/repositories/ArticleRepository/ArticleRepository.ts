@@ -29,7 +29,9 @@ export default class ArticleRepository {
   }
 
   public getPublicArticles(): Array<Article> {
-    return this.records.filter((record) => record.visibility === Visibility.PUBLIC);
+    return this.records.filter(
+      (record) => record.visibility === Visibility.PUBLIC,
+    );
   }
 
   public getUserArticles(userId: string): Array<Article> {

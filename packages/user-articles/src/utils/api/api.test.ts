@@ -18,7 +18,8 @@ describe('buildResponse', () => {
   describe('buildSuccessResponse', () => {
     test('should build success response with given data', () => {
       const expectedData = { foo: 'bar' };
-      const response = buildSuccessResponse<Record<string, string>>(expectedData);
+      const response =
+        buildSuccessResponse<Record<string, string>>(expectedData);
 
       expect(response).toStrictEqual({
         data: expectedData,

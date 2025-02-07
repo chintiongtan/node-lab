@@ -1,6 +1,9 @@
 import { TErrorResponse, TResponse } from '../../types/api';
 
-export const buildErrorResponse = (code: number, message: string): TErrorResponse => ({
+export const buildErrorResponse = (
+  code: number,
+  message: string,
+): TErrorResponse => ({
   error: {
     code,
     message,

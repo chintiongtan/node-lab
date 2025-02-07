@@ -6,7 +6,11 @@ import { createArticleRequestSchema } from '../schemas/request/article';
 
 const router = express.Router();
 
-router.post('/', [checkSessionToken, validateSchema(createArticleRequestSchema)], create);
+router.post(
+  '/',
+  [checkSessionToken, validateSchema(createArticleRequestSchema)],
+  create,
+);
 
 router.get('/', list);
 

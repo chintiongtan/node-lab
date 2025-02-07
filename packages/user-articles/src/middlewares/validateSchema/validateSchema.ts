@@ -5,7 +5,11 @@ import { api } from '../../utils';
 
 const validateSchema =
   (schema: AnyZodObject): Handler =>
-  async (req: Request, res: Response<TZodErrorResponse>, next: NextFunction) => {
+  async (
+    req: Request,
+    res: Response<TZodErrorResponse>,
+    next: NextFunction,
+  ) => {
     try {
       await schema.parseAsync({
         body: req.body,
@@ -15,7 +19,10 @@ const validateSchema =
 
       next();
     } catch (error) {
-      const response = api.buildErrorResponse(400, 'Invalid body, query or params');
+      const response = api.buildErrorResponse(
+        400,
+        'Invalid body, query or params',
+      );
 
       res.status(400).send({
         ...response,

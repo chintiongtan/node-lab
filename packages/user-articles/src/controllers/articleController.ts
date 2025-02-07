@@ -9,10 +9,16 @@ const userSessionRepository = UserSessionRepository.getInstance();
 const articleRepository = ArticleRepository.getInstance();
 
 export function create(req: Request, res: Response) {
-  const { article_id, title, content, visibility } = req.body as CreateArticleInput;
-  const userSession = userSessionRepository.getUserSessionByToken(req.get(HEADER_AUTH) as string) as UserSession;
+  const { article_id, title, content, visibility } =
+    req.body as CreateArticleInput;
+  const userSession = userSessionRepository.getUserSessionByToken(
+    req.get(HEADER_AUTH) as string,
+  ) as UserSession;
 
-  articleRepository.create({ article_id, title, content, visibility }, userSession);
+  articleRepository.create(
+    { article_id, title, content, visibility },
+    userSession,
+  );
 
   res.status(201).end();
 }
@@ -25,7 +31,9 @@ export function list(req: Request, res: Response) {
     return;
   }
 
-  const userSession = userSessionRepository.getUserSessionByToken(authToken) as UserSession;
+  const userSession = userSessionRepository.getUserSessionByToken(
+    authToken,
+  ) as UserSession;
 
   res.status(200).json(articleRepository.getUserArticles(userSession.user_id));
 }
