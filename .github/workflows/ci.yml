@@ -1,14 +1,11 @@
 name: Continuous Integration
 
 on:
-  push:
-    branches:
-      - "chore/NLB-9/setup-ci-pipeline"
-  # pull_request:
-  #   branches: ['main']
-  #   paths-ignore:
-  #     - '**/*.md'
-  #   types: [opened, ready_for_review, reopened]
+  pull_request:
+    branches: ["main"]
+    paths-ignore:
+      - "**/*.md"
+    types: [opened, ready_for_review, reopened]
 
 jobs:
   build:
