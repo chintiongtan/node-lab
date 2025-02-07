@@ -1,1 +1,1 @@
-pnpm lint-staged
+pnpm lerna run lint-staged
