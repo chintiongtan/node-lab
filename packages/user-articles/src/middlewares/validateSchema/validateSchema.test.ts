@@ -10,7 +10,10 @@ const schema = z.object({
 const validate = validateSchema(schema);
 
 describe('validateSchema', () => {
-  const mockedRes = { send: jest.fn(() => mockedRes), status: jest.fn(() => mockedRes) } as unknown as Response;
+  const mockedRes = {
+    send: jest.fn(() => mockedRes),
+    status: jest.fn(() => mockedRes),
+  } as unknown as Response;
   const mockedNext = jest.fn();
 
   beforeEach(() => {
@@ -18,7 +21,11 @@ describe('validateSchema', () => {
   });
 
   test('should forward request if validation passes', async () => {
-    const mockedReq = { body: { foo: 'bar' }, params: { foo: 'bar' }, query: { foo: 'bar' } } as unknown as Request;
+    const mockedReq = {
+      body: { foo: 'bar' },
+      params: { foo: 'bar' },
+      query: { foo: 'bar' },
+    } as unknown as Request;
 
     await validate(mockedReq, mockedRes, mockedNext);
 

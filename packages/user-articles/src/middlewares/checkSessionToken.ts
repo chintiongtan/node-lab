@@ -4,7 +4,11 @@ import UserSessionRepository from '../repositories/UserSessionRepository';
 
 const userSessionRepository = UserSessionRepository.getInstance();
 
-export default function checkSessionToken(req: Request, res: Response, next: NextFunction) {
+export default function checkSessionToken(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const unauthorised = () => {
     res.status(401).end();
     return;
