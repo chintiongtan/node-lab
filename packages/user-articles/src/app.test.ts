@@ -112,7 +112,7 @@ describe('API', () => {
 
     return request(app)
       .post('/api/auth/logout')
-      .set('authentication-header', 'sometoken')
+      .set('Authorization', 'Bearer sometoken')
       .then((response) => {
         expect(mockGetUserSessionByToken).toHaveBeenCalledWith('sometoken');
         expect(mockDeleteUserSessionByToken).toHaveBeenCalledWith('sometoken');
@@ -144,7 +144,7 @@ describe('API', () => {
 
     return request(app)
       .post('/api/auth/logout')
-      .set('authentication-header', 'sometoken')
+      .set('Authorization', 'Bearer sometoken')
       .then((response) => {
         expect(mockGetUserSessionByToken).toHaveBeenCalledWith('sometoken');
         expect(response.statusCode).toEqual(401);

@@ -10,19 +10,20 @@ const authorized = async (req: Request, res: Response, next: NextFunction) => {
     return;
   };
 
-  const bearerToken = req.header('authorization');
+  const bearerToken = req.header('Authorization');
 
   if (!bearerToken) {
     return unauthorized();
   }
 
-  const token = userSessionRepository.getUserSessionByToken(
-    bearerToken.replace('Bearer ', ''),
-  );
+  const token = bearerToken.replace('Bearer ', '');
+  const userSession = userSessionRepository.getUserSessionByToken(token);
 
-  if (!token) {
+  if (!userSession) {
     return unauthorized();
   }
+
+  res.locals.token = token;
 
   next();
 };
