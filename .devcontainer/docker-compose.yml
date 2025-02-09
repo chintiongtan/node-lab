@@ -11,10 +11,38 @@ services:
     volumes:
       - nodelab-devcontainer:/workspaces:cached
 
+  nodelab-dynamodb:
+    image: amazon/dynamodb-local:latest
+    command: -jar DynamoDBLocal.jar -sharedDb
+    container_name: nodelab-db
+    networks:
+      - nodelab
+    ports:
+      - 8000:8000
+    volumes:
+      - nodelab-dynamodb:/home/dynamodblocal/data
+    working_dir: /home/dynamodblocal
+
+  dynamodb-admin:
+    depends_on:
+      - nodelab-dynamodb
+    environment:
+      DYNAMO_ENDPOINT: 'http://nodelab-dynamodb:8000'
+      AWS_REGION: ap-southeast-2
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    image: aaronshaf/dynamodb-admin
+    networks:
+      - nodelab
+    ports:
+    - 8001:8001
+
 networks:
   nodelab:
     driver: bridge
 
 volumes:
   nodelab-devcontainer:
+    driver: local
+  nodelab-dynamodb:
     driver: local
