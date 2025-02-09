@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import UserSessionRepository from '../repositories/UserSessionRepository';
 import ArticleRepository from '../repositories/ArticleRepository';
 import { CreateArticleInput } from '../types/article';
-import { HEADER_AUTH } from '../utils/constants';
 import { UserSession } from '../types/userSession';
 
 const userSessionRepository = UserSessionRepository.getInstance();
@@ -12,7 +11,7 @@ export function create(req: Request, res: Response) {
   const { article_id, title, content, visibility } =
     req.body as CreateArticleInput;
   const userSession = userSessionRepository.getUserSessionByToken(
-    req.get(HEADER_AUTH) as string,
+    res.locals.token,
   ) as UserSession;
 
   articleRepository.create(
@@ -24,7 +23,7 @@ export function create(req: Request, res: Response) {
 }
 
 export function list(req: Request, res: Response) {
-  const authToken = req.get(HEADER_AUTH);
+  const authToken = res.locals.token;
 
   if (!authToken || !userSessionRepository.getUserSessionByToken(authToken)) {
     res.status(200).json(articleRepository.getPublicArticles());

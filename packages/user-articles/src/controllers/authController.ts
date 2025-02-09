@@ -3,7 +3,6 @@ import { LoginInput, User } from '../types/user';
 import UserRepository from '../repositories/UserRepository';
 import { v4 as uuidv4 } from 'uuid';
 import UserSessionRepository from '../repositories/UserSessionRepository';
-import { HEADER_AUTH } from '../utils/constants';
 
 const userRepository = UserRepository.getInstance();
 const userSessionRepository = UserSessionRepository.getInstance();
@@ -30,9 +29,7 @@ export function login(req: Request, res: Response) {
 }
 
 export function logout(req: Request, res: Response) {
-  userSessionRepository.deleteUserSessionByToken(
-    req.get(HEADER_AUTH) as string,
-  );
+  userSessionRepository.deleteUserSessionByToken(res.locals.token);
 
   res.status(200).end();
 }
