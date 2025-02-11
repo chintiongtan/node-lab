@@ -6,7 +6,7 @@
     "format": "eslint --fix",
     "lint": "eslint",
     "lint-staged": "lint-staged",
-    "start": "tsx watch src/index.ts",
+    "start": "tsx watch --env-file=.env src/index.ts",
     "test": "jest",
     "test:ci": "jest --coverage"
   },
