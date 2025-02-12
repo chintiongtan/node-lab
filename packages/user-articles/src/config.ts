@@ -9,11 +9,11 @@ type TAppConfig = {
   environment: TEnvironment;
 };
 
-const parseEnv = (key: string, defaultValue?: string) =>
+const parseEnv = <T>(key: string, defaultValue?: T) =>
   process.env[key] ?? defaultValue;
 
 const common = {
-  dbEndpointUrl: parseEnv('DB_ENDPOINT_URL'),
+  dbEndpointUrl: parseEnv('DB_ENDPOINT_URL', ''),
 };
 const configs: Record<TEnvironment, () => Omit<TAppConfig, 'environment'>> = {
   local: () => ({
