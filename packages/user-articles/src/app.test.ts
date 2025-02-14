@@ -16,6 +16,8 @@ describe('API', () => {
     };
     const mockCreate = jest.spyOn(UserRepository.prototype, 'create');
 
+    mockCreate.mockResolvedValue();
+
     return request(app)
       .post('/api/user')
       .send(payload)
@@ -38,22 +40,24 @@ describe('API', () => {
 
   test('POST /api/auth should return token if user exists', () => {
     const user = {
-      user_id: '10001',
-      login: 'username@example.org',
-      password: 'abc*123!',
+      CreatedAt: '',
+      Login: 'username@example.org',
+      Password: 'abc*123!',
+      UpdatedAt: '',
+      UserId: '10001',
     };
     const mockGetUserByLogin = jest.spyOn(
       UserRepository.prototype,
       'getUserByLogin',
     );
 
-    mockGetUserByLogin.mockReturnValue(user);
+    mockGetUserByLogin.mockResolvedValue(user);
 
     return request(app)
       .post('/api/auth')
-      .send({ login: user.login, password: user.password })
+      .send({ login: user.Login, password: user.Password })
       .then((response) => {
-        expect(mockGetUserByLogin).toHaveBeenCalledWith(user.login);
+        expect(mockGetUserByLogin).toHaveBeenCalledWith(user.Login);
         expect(response.statusCode).toEqual(200);
         expect(response.body.token).toBeDefined();
       });
@@ -75,22 +79,24 @@ describe('API', () => {
 
   test('POST /api/auth should return 401 if password is incorrect', () => {
     const user = {
-      user_id: '10001',
-      login: 'username@example.org',
-      password: 'abc*123!',
+      CreatedAt: '',
+      Login: 'username@example.org',
+      Password: 'abc*123!',
+      UpdatedAt: '',
+      UserId: '10001',
     };
     const mockGetUserByLogin = jest.spyOn(
       UserRepository.prototype,
       'getUserByLogin',
     );
 
-    mockGetUserByLogin.mockReturnValue(user);
+    mockGetUserByLogin.mockResolvedValue(user);
 
     return request(app)
       .post('/api/auth')
-      .send({ login: user.login, password: 'def*456!' })
+      .send({ login: user.Login, password: 'def*456!' })
       .then((response) => {
-        expect(mockGetUserByLogin).toHaveBeenCalledWith(user.login);
+        expect(mockGetUserByLogin).toHaveBeenCalledWith(user.Login);
         expect(response.statusCode).toEqual(401);
       });
   });

@@ -7,3 +7,11 @@ export const createUserRequestSchema = z.object({
     user_id: z.string().nonempty(),
   }),
 });
+
+export const userSchema = z.object({
+  CreatedAt: z.string().date(),
+  Login: z.string(),
+  Password: z.string(),
+  UpdatedAt: z.string().date(),
+  UserId: z.string(),
+});
