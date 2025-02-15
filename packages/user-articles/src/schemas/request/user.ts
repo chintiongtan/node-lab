@@ -9,9 +9,9 @@ export const createUserRequestSchema = z.object({
 });
 
 export const userSchema = z.object({
-  CreatedAt: z.string().date(),
+  CreatedAt: z.string(),
   Login: z.string(),
   Password: z.string(),
-  UpdatedAt: z.string().date(),
+  UpdatedAt: z.string(),
   UserId: z.string(),
 });
