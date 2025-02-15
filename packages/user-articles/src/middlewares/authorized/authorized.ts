@@ -17,7 +17,7 @@ const authorized = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   const token = bearerToken.replace('Bearer ', '');
-  const userSession = userSessionRepository.getUserSessionByToken(token);
+  const userSession = await userSessionRepository.getUserSessionByToken(token);
 
   if (!userSession) {
     return unauthorized();

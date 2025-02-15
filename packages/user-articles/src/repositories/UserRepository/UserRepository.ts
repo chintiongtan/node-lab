@@ -9,7 +9,13 @@ const User = dynamoose.model(
   new dynamoose.Schema(
     {
       pk: {
+        hashKey: true,
         map: 'Login',
+        type: String,
+      },
+      sk: {
+        default: 'ROOT',
+        rangeKey: true,
         type: String,
       },
       Password: String,

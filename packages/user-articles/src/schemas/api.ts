@@ -20,8 +20,8 @@ export const createUserRequestSchema = z.object({
 
 export const createUserSessionRequest = z.object({
   body: z.object({
+    login: z.string(),
     token: z.string(),
-    user_id: z.string(),
   }),
 });
 

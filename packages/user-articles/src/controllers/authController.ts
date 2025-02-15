@@ -26,13 +26,13 @@ export async function login(
 
   const token = uuidv4();
 
-  userSessionRepository.create({ user_id: user.UserId, token });
+  await userSessionRepository.create({ login: user.Login, token });
 
   res.status(200).json({ token });
 }
 
-export function logout(req: Request, res: Response) {
-  userSessionRepository.deleteUserSessionByToken(res.locals.token);
+export async function logout(req: Request, res: Response) {
+  await userSessionRepository.deleteUserSessionByToken(res.locals.token);
 
   res.status(200).end();
 }
