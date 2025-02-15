@@ -1,14 +1,17 @@
 import { Request, Response } from 'express';
-import { LoginInput } from '../types/user';
 import UserRepository from '../repositories/UserRepository';
 import { v4 as uuidv4 } from 'uuid';
 import UserSessionRepository from '../repositories/UserSessionRepository';
+import { TLoginRequest } from '../types/api';
 
 const userRepository = UserRepository.getInstance();
 const userSessionRepository = UserSessionRepository.getInstance();
 
-export async function login(req: Request, res: Response) {
-  const { login, password } = req.body as LoginInput;
+export async function login(
+  req: Request<unknown, TLoginRequest['body']>,
+  res: Response,
+) {
+  const { login, password } = req.body;
   const user = await userRepository.getUserByLogin(login);
 
   if (!user) {

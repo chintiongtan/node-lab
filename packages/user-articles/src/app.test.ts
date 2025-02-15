@@ -112,8 +112,10 @@ describe('API', () => {
     );
 
     mockGetUserSessionByToken.mockReturnValue({
-      user_id: '10001',
-      token: 'sometoken',
+      CreatedAt: '',
+      Token: 'sometoken',
+      UpdatedAt: '',
+      UserId: '10001',
     });
 
     return request(app)

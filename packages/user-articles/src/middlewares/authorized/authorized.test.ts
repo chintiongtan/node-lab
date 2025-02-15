@@ -20,8 +20,10 @@ describe('authorized', () => {
 
   test('should forward request if token is valid', async () => {
     mockedGetUserSessionByToken.mockReturnValue({
-      token: 'abc123',
-      user_id: '000',
+      CreatedAt: '',
+      Token: 'abc123',
+      UpdatedAt: '',
+      UserId: '000',
     });
 
     const mockedHeader = jest.fn().mockReturnValue('abc123');

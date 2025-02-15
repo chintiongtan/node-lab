@@ -1,6 +1,7 @@
 import { config } from '../../config';
-import { userSchema } from '../../schemas/request/user';
-import { CreateUserInput, TUser } from '../../types/user';
+import { userSchema } from '../../schemas/user';
+import { TCreateUserRequest } from '../../types/api';
+import { TUser } from '../../types/user';
 import * as dynamoose from 'dynamoose';
 
 const User = dynamoose.model(
@@ -62,7 +63,7 @@ export default class UserRepository {
     return UserRepository.instance;
   }
 
-  public async create(input: CreateUserInput): Promise<void> {
+  public async create(input: TCreateUserRequest['body']): Promise<void> {
     const { login: Login, password: Password, user_id: UserId } = input;
 
     await User.create({

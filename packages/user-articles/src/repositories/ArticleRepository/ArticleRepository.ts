@@ -1,5 +1,6 @@
-import { Article, CreateArticleInput, Visibility } from '../../types/article';
-import { UserSession } from '../../types/userSession';
+import { TCreateArticleRequest } from '../../types/api';
+import { Article, Visibility } from '../../types/article';
+import { TUserSession } from '../../types/userSession';
 
 export default class ArticleRepository {
   private static instance: ArticleRepository;
@@ -18,13 +19,16 @@ export default class ArticleRepository {
     return ArticleRepository.instance;
   }
 
-  public create(input: CreateArticleInput, userSession: UserSession): void {
+  public create(
+    input: TCreateArticleRequest['body'],
+    userSession: TUserSession,
+  ): void {
     this.records.push({
       article_id: input.article_id,
       title: input.title,
       content: input.content,
       visibility: input.visibility,
-      user_id: userSession.user_id,
+      user_id: userSession.UserId,
     });
   }
 

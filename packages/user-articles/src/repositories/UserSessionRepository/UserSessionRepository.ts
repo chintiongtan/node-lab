@@ -1,9 +1,10 @@
-import { CreateUserSessionInput, UserSession } from '../../types/userSession';
+import { TCreateUserSessionRequest } from '../../types/api';
+import { TUserSession } from '../../types/userSession';
 
 export default class UserSessionRepository {
   private static instance: UserSessionRepository;
 
-  private records: Array<UserSession>;
+  private records: Array<TUserSession>;
 
   private constructor() {
     this.records = [];
@@ -17,19 +18,21 @@ export default class UserSessionRepository {
     return UserSessionRepository.instance;
   }
 
-  public create(input: CreateUserSessionInput): void {
+  public create(input: TCreateUserSessionRequest['body']): void {
     this.records.push({
-      token: input.token,
-      user_id: input.user_id,
+      CreatedAt: '',
+      Token: input.token,
+      UpdatedAt: '',
+      UserId: input.user_id,
     });
   }
 
-  public getUserSessionByToken(token: string): UserSession | undefined {
-    return this.records.find((record) => record.token === token);
+  public getUserSessionByToken(token: string): TUserSession | undefined {
+    return this.records.find((record) => record.Token === token);
   }
 
   public deleteUserSessionByToken(token: string): void {
-    const index = this.records.findIndex((record) => record.token === token);
+    const index = this.records.findIndex((record) => record.Token === token);
 
     this.records.splice(index, 1);
   }

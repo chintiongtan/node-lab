@@ -1,9 +1,4 @@
-export type UserSession = {
-  user_id: string;
-  token: string;
-};
+import { z } from 'zod';
+import { userSessionSchema } from '../schemas/userSession';
 
-export type CreateUserSessionInput = {
-  user_id: string;
-  token: string;
-};
+export type TUserSession = z.infer<typeof userSessionSchema>;

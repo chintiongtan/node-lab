@@ -2,7 +2,7 @@ import express from 'express';
 import { login, logout } from '../controllers/authController';
 import authorized from '../middlewares/authorized';
 import validateSchema from '../middlewares/validateSchema';
-import { loginRequestSchema } from '../schemas/request/auth';
+import { loginRequestSchema } from '../schemas/api';
 
 const router = express.Router();
 
