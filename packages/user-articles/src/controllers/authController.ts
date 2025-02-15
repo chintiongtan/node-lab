@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { LoginInput, User } from '../types/user';
+import { LoginInput } from '../types/user';
 import UserRepository from '../repositories/UserRepository';
 import { v4 as uuidv4 } from 'uuid';
 import UserSessionRepository from '../repositories/UserSessionRepository';
@@ -7,23 +7,23 @@ import UserSessionRepository from '../repositories/UserSessionRepository';
 const userRepository = UserRepository.getInstance();
 const userSessionRepository = UserSessionRepository.getInstance();
 
-export function login(req: Request, res: Response) {
+export async function login(req: Request, res: Response) {
   const { login, password } = req.body as LoginInput;
-  const user = userRepository.getUserByLogin(login);
+  const user = await userRepository.getUserByLogin(login);
 
   if (!user) {
     res.status(404).end();
     return;
   }
 
-  if ((user as User).password !== password) {
+  if (user.Password !== password) {
     res.status(401).end();
     return;
   }
 
   const token = uuidv4();
 
-  userSessionRepository.create({ user_id: (user as User).user_id, token });
+  userSessionRepository.create({ user_id: user.UserId, token });
 
   res.status(200).json({ token });
 }

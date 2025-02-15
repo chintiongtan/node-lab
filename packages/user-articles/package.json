@@ -6,11 +6,12 @@
     "format": "eslint --fix",
     "lint": "eslint",
     "lint-staged": "lint-staged",
-    "start": "tsx watch src/index.ts",
+    "start": "tsx watch --env-file=.env src/index.ts",
     "test": "jest",
     "test:ci": "jest --coverage"
   },
   "dependencies": {
+    "dynamoose": "^4.0.3",
     "express": "^4.18.3",
     "lodash": "4.17.11",
     "tsx": "^4.19.2",
