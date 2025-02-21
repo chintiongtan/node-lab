@@ -5,4 +5,5 @@ export const userSessionSchema = z.object({
   Login: z.string(),
   Token: z.string(),
   UpdatedAt: z.string().datetime(),
+  UserId: z.string(),
 });

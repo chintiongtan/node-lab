@@ -3,12 +3,14 @@ import { Visibility } from '../../types/article';
 
 const userSessionA = {
   CreatedAt: '',
+  Login: 'john.doe',
   Token: 'secret',
   UpdatedAt: '',
   UserId: '10001',
 };
 const userSessionB = {
   CreatedAt: '',
+  Login: 'jake.doe',
   Token: 'secret',
   UpdatedAt: '',
   UserId: '10002',

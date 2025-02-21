@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { Visibility } from '../types/article';
+import { userSchema } from './user';
 
 export const createArticleRequestSchema = z.object({
   body: z.object({
@@ -20,8 +21,8 @@ export const createUserRequestSchema = z.object({
 
 export const createUserSessionRequest = z.object({
   body: z.object({
-    login: z.string(),
     token: z.string(),
+    user: userSchema,
   }),
 });
 

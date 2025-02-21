@@ -1,87 +1,33 @@
-import { config } from '../../config';
 import { userSessionSchema } from '../../schemas/userSession';
 import { TCreateUserSessionRequest } from '../../types/api';
 import { TUserSession } from '../../types/userSession';
-import * as dynamoose from 'dynamoose';
+import { DynamoDbRepository, UserModel } from '../DynamoDbRepository';
 
-const UserSession = dynamoose.model(
-  'UserArticle',
-  new dynamoose.Schema(
-    {
-      pk: {
-        hashKey: true,
-        map: 'Login',
-        type: String,
-      },
-      sk: {
-        rangeKey: true,
-        type: String,
-      },
-      Token: {
-        index: true,
-        type: String,
-      },
-    },
-    {
-      timestamps: {
-        createdAt: {
-          CreatedAt: {
-            type: {
-              value: String,
-              settings: {
-                storage: 'iso',
-              },
-            },
-          },
-        },
-        updatedAt: {
-          UpdatedAt: {
-            type: {
-              value: String,
-              settings: {
-                storage: 'iso',
-              },
-            },
-          },
-        },
-      },
-    },
-  ),
-  {
-    create: config.environment === 'local',
-    waitForActive: config.environment === 'local',
-  },
-);
-
-export default class UserSessionRepository {
+export default class UserSessionRepository extends DynamoDbRepository {
   private static instance: UserSessionRepository;
 
-  private constructor() {
-    if (config.dbEndpointUrl) {
-      dynamoose.aws.ddb.local(config.dbEndpointUrl);
-    }
-  }
-
-  public static getInstance(): UserSessionRepository {
+  static getInstance(): UserSessionRepository {
     if (!UserSessionRepository.instance) {
-      UserSessionRepository.instance = new UserSessionRepository();
+      UserSessionRepository.instance = new UserSessionRepository(UserModel);
     }
 
     return UserSessionRepository.instance;
   }
 
   public async create(input: TCreateUserSessionRequest['body']): Promise<void> {
-    await UserSession.create({
-      Login: input.login,
+    await this.model.create({
+      Login: input.user.Login,
       sk: `SESSION#${input.token}`,
       Token: input.token,
+      UserId: input.user.UserId,
     });
   }
 
   public async getUserSessionByToken(
     token: string,
   ): Promise<TUserSession | undefined> {
-    const result = await UserSession.query({ Token: token })
+    const result = await this.model
+      .query({ Token: token })
       .using('TokenGlobalIndex')
       .exec();
 
@@ -101,7 +47,7 @@ export default class UserSessionRepository {
       return;
     }
 
-    await UserSession.delete({
+    await this.model.delete({
       Login: userSession.Login,
       sk: `SESSION#${userSession.Token}`,
     });

@@ -26,7 +26,7 @@ export async function login(
 
   const token = uuidv4();
 
-  await userSessionRepository.create({ login: user.Login, token });
+  await userSessionRepository.create({ token, user });
 
   res.status(200).json({ token });
 }

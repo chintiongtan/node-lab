@@ -6,12 +6,12 @@ import { TCreateArticleRequest } from '../types/api';
 const userSessionRepository = UserSessionRepository.getInstance();
 const articleRepository = ArticleRepository.getInstance();
 
-export function create(
+export async function create(
   req: Request<unknown, TCreateArticleRequest['body']>,
   res: Response,
 ) {
   const { article_id, title, content, visibility } = req.body;
-  const userSession = userSessionRepository.getUserSessionByToken(
+  const userSession = await userSessionRepository.getUserSessionByToken(
     res.locals.token,
   );
 
@@ -28,9 +28,10 @@ export function create(
   res.status(201).end();
 }
 
-export function list(req: Request, res: Response) {
+export async function list(req: Request, res: Response) {
   const authToken = res.locals.token;
-  const userSession = userSessionRepository.getUserSessionByToken(authToken);
+  const userSession =
+    await userSessionRepository.getUserSessionByToken(authToken);
 
   if (!authToken || !userSession) {
     res.status(200).json(articleRepository.getPublicArticles());
