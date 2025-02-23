@@ -1,8 +1,20 @@
 import ArticleRepository from './ArticleRepository';
 import { Visibility } from '../../types/article';
 
-const userSessionA = { user_id: '10001', token: 'secret' };
-const userSessionB = { user_id: '10002', token: 'secret' };
+const userSessionA = {
+  CreatedAt: '',
+  Login: 'john.doe',
+  Token: 'secret',
+  UpdatedAt: '',
+  UserId: '10001',
+};
+const userSessionB = {
+  CreatedAt: '',
+  Login: 'jake.doe',
+  Token: 'secret',
+  UpdatedAt: '',
+  UserId: '10002',
+};
 const articleRepository = ArticleRepository.getInstance();
 
 beforeAll(() => {
@@ -108,7 +120,7 @@ describe('ArticleRepository', () => {
   });
 
   test('getUserArticles should return all user accessible articles', () => {
-    const articles = articleRepository.getUserArticles(userSessionA.user_id);
+    const articles = articleRepository.getUserArticles(userSessionA.UserId);
 
     expect(articles.length).toEqual(5);
     expect(articles).toEqual(
@@ -118,35 +130,35 @@ describe('ArticleRepository', () => {
           title: 'Article #1',
           content: 'Article #1 content',
           visibility: Visibility.PUBLIC,
-          user_id: userSessionA.user_id,
+          user_id: userSessionA.UserId,
         },
         {
           article_id: '10002',
           title: 'Article #2',
           content: 'Article #2 content',
           visibility: Visibility.LOGGED_IN,
-          user_id: userSessionA.user_id,
+          user_id: userSessionA.UserId,
         },
         {
           article_id: '10003',
           title: 'Article #3',
           content: 'Article #3 content',
           visibility: Visibility.PRIVATE,
-          user_id: userSessionA.user_id,
+          user_id: userSessionA.UserId,
         },
         {
           article_id: '10004',
           title: 'Article #4',
           content: 'Article #4 content',
           visibility: Visibility.PUBLIC,
-          user_id: userSessionB.user_id,
+          user_id: userSessionB.UserId,
         },
         {
           article_id: '10005',
           title: 'Article #5',
           content: 'Article #5 content',
           visibility: Visibility.LOGGED_IN,
-          user_id: userSessionB.user_id,
+          user_id: userSessionB.UserId,
         },
       ]),
     );

@@ -1,14 +1,17 @@
 import { Request, Response } from 'express';
-import { LoginInput } from '../types/user';
 import UserRepository from '../repositories/UserRepository';
 import { v4 as uuidv4 } from 'uuid';
 import UserSessionRepository from '../repositories/UserSessionRepository';
+import { TLoginRequest } from '../types/api';
 
 const userRepository = UserRepository.getInstance();
 const userSessionRepository = UserSessionRepository.getInstance();
 
-export async function login(req: Request, res: Response) {
-  const { login, password } = req.body as LoginInput;
+export async function login(
+  req: Request<unknown, TLoginRequest['body']>,
+  res: Response,
+) {
+  const { login, password } = req.body;
   const user = await userRepository.getUserByLogin(login);
 
   if (!user) {
@@ -23,13 +26,13 @@ export async function login(req: Request, res: Response) {
 
   const token = uuidv4();
 
-  userSessionRepository.create({ user_id: user.UserId, token });
+  await userSessionRepository.create({ token, user });
 
   res.status(200).json({ token });
 }
 
-export function logout(req: Request, res: Response) {
-  userSessionRepository.deleteUserSessionByToken(res.locals.token);
+export async function logout(req: Request, res: Response) {
+  await userSessionRepository.deleteUserSessionByToken(res.locals.token);
 
   res.status(200).end();
 }

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import UserSessionRepository from '../../repositories/UserSessionRepository';
 import authorized from './authorized';
 
+jest.mock('dynamoose');
+
 describe('authorized', () => {
   const mockedRes = {
     locals: {},
@@ -19,9 +21,12 @@ describe('authorized', () => {
   });
 
   test('should forward request if token is valid', async () => {
-    mockedGetUserSessionByToken.mockReturnValue({
-      token: 'abc123',
-      user_id: '000',
+    mockedGetUserSessionByToken.mockResolvedValue({
+      CreatedAt: '',
+      Login: '',
+      Token: 'abc123',
+      UpdatedAt: '',
+      UserId: '000',
     });
 
     const mockedHeader = jest.fn().mockReturnValue('abc123');
@@ -53,7 +58,7 @@ describe('authorized', () => {
   });
 
   test('should return unauthorized if token is invalid', async () => {
-    mockedGetUserSessionByToken.mockReturnValue(undefined);
+    mockedGetUserSessionByToken.mockResolvedValue(undefined);
 
     const mockedHeader = jest.fn().mockReturnValue('abc123');
     const mockedReq = { header: mockedHeader } as unknown as Request;

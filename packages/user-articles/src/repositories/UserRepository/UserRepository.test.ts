@@ -10,6 +10,7 @@ jest.mock('dynamoose', () => ({
     query: mockedModelQuery,
   }),
   Schema: jest.fn(),
+  Table: jest.fn(),
 }));
 
 const userRepository = UserRepository.getInstance();
@@ -52,6 +53,7 @@ describe('UserRepository', () => {
 
     expect(mockedModelQuery).toHaveBeenCalledWith({
       Login: 'username@example.org',
+      sk: 'ROOT',
     });
     expect(user).toBeDefined();
     expect(user?.Login).toBe('username@example.org');
@@ -66,6 +68,7 @@ describe('UserRepository', () => {
 
       expect(mockedModelQuery).toHaveBeenCalledWith({
         Login: 'username@example.org',
+        sk: 'ROOT',
       });
       expect(user).toBeUndefined();
     },

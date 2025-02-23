@@ -2,6 +2,8 @@
 
 # Node Lab
 
+![CI](https://github.com/chintiongtan/node-labs/actions/workflows/ci.yml/badge.svg)
+
 This project contains a collection of Proof-of-Concept (POC) implementations using Node.
 
 [Getting Started](#getting-started)

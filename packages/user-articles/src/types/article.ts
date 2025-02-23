@@ -11,10 +11,3 @@ export type Article = {
   visibility: Visibility;
   user_id: string;
 };
-
-export type CreateArticleInput = {
-  article_id: string;
-  title: string;
-  content: string;
-  visibility: Visibility;
-};
