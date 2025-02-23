@@ -3,6 +3,8 @@ import app from './app';
 import UserRepository from './repositories/UserRepository';
 import UserSessionRepository from './repositories/UserSessionRepository';
 
+jest.mock('dynamoose');
+
 describe('API', () => {
   const mockedUserCreate = jest.spyOn(UserRepository.prototype, 'create');
   const mockedUserSessionCreate = jest.spyOn(

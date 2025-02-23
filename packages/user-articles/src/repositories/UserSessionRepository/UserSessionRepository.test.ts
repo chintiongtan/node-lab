@@ -13,6 +13,7 @@ jest.mock('dynamoose', () => ({
     query: mockedModelQuery,
   }),
   Schema: jest.fn(),
+  Table: jest.fn(),
 }));
 
 const userSessionRepository = UserSessionRepository.getInstance();

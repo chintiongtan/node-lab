@@ -1,7 +1,8 @@
+import { UserModel } from '../../models/user';
 import { userSchema } from '../../schemas/user';
 import { TCreateUserRequest } from '../../types/api';
 import { TUser } from '../../types/user';
-import { DynamoDbRepository, UserModel } from '../DynamoDbRepository';
+import { DynamoDbRepository } from '../DynamoDbRepository';
 
 export default class UserRepository extends DynamoDbRepository {
   private static instance: UserRepository;
@@ -25,7 +26,7 @@ export default class UserRepository extends DynamoDbRepository {
   }
 
   public async getUserByLogin(login: string): Promise<TUser | undefined> {
-    const result = await this.model.query({ Login: login }).exec();
+    const result = await this.model.query({ Login: login, sk: 'ROOT' }).exec();
 
     if (!result.length) {
       return undefined;

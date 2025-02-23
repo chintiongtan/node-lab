@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import UserSessionRepository from '../../repositories/UserSessionRepository';
 import authorized from './authorized';
 
+jest.mock('dynamoose');
+
 describe('authorized', () => {
   const mockedRes = {
     locals: {},

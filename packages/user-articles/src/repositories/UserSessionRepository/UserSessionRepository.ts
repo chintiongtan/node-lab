@@ -1,14 +1,17 @@
+import { UserSessionModel } from '../../models/userSession';
 import { userSessionSchema } from '../../schemas/userSession';
 import { TCreateUserSessionRequest } from '../../types/api';
 import { TUserSession } from '../../types/userSession';
-import { DynamoDbRepository, UserModel } from '../DynamoDbRepository';
+import { DynamoDbRepository } from '../DynamoDbRepository';
 
 export default class UserSessionRepository extends DynamoDbRepository {
   private static instance: UserSessionRepository;
 
   static getInstance(): UserSessionRepository {
     if (!UserSessionRepository.instance) {
-      UserSessionRepository.instance = new UserSessionRepository(UserModel);
+      UserSessionRepository.instance = new UserSessionRepository(
+        UserSessionModel,
+      );
     }
 
     return UserSessionRepository.instance;
