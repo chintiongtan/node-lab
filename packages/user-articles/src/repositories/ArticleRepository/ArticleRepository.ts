@@ -1,11 +1,12 @@
+import { Visibility } from '../../schemas/article';
 import { TCreateArticleRequest } from '../../types/api';
-import { Article, Visibility } from '../../types/article';
+import { TArticle } from '../../types/article';
 import { TUserSession } from '../../types/userSession';
 
 export default class ArticleRepository {
   private static instance: ArticleRepository;
 
-  private records: Array<Article>;
+  private records: Array<TArticle>;
 
   private constructor() {
     this.records = [];
@@ -24,26 +25,28 @@ export default class ArticleRepository {
     userSession: TUserSession,
   ): void {
     this.records.push({
-      article_id: input.article_id,
-      title: input.title,
-      content: input.content,
-      visibility: input.visibility,
-      user_id: userSession.UserId,
+      ArticleId: input.article_id,
+      CreatedAt: '',
+      Title: input.title,
+      Content: input.content,
+      Visibility: input.visibility,
+      UpdatedAt: '',
+      UserId: userSession.UserId,
     });
   }
 
-  public getPublicArticles(): Array<Article> {
+  public getPublicArticles(): Array<TArticle> {
     return this.records.filter(
-      (record) => record.visibility === Visibility.PUBLIC,
+      (record) => record.Visibility === Visibility.PUBLIC,
     );
   }
 
-  public getUserArticles(userId: string): Array<Article> {
+  public getUserArticles(userId: string): Array<TArticle> {
     return this.records.filter(
       (record) =>
-        record.visibility === Visibility.PUBLIC ||
-        record.visibility === Visibility.LOGGED_IN ||
-        (record.visibility === Visibility.PRIVATE && record.user_id === userId),
+        record.Visibility === Visibility.PUBLIC ||
+        record.Visibility === Visibility.LOGGED_IN ||
+        (record.Visibility === Visibility.PRIVATE && record.UserId === userId),
     );
   }
 }

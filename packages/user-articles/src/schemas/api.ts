@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Visibility } from '../types/article';
+import { Visibility } from '../schemas/article';
 import { userSchema } from './user';
 
 export const createArticleRequestSchema = z.object({

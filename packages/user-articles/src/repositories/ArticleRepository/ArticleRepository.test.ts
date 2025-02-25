@@ -1,5 +1,5 @@
 import ArticleRepository from './ArticleRepository';
-import { Visibility } from '../../types/article';
+import { Visibility } from '../../schemas/article';
 
 const userSessionA = {
   CreatedAt: '',
