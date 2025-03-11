@@ -12,6 +12,6 @@ router.post(
   create,
 );
 
-router.get('/', list);
+router.get('/', [authorized(false)], list);
 
 export default router;
