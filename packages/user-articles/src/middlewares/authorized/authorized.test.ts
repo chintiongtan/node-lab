@@ -32,7 +32,22 @@ describe('authorized', () => {
     const mockedHeader = jest.fn().mockReturnValue('abc123');
     const mockedReq = { header: mockedHeader } as unknown as Request;
 
-    await authorized(mockedReq, mockedRes, mockedNext);
+    await authorized()(mockedReq, mockedRes, mockedNext);
+
+    expect(mockedHeader).toHaveBeenCalledWith('Authorization');
+    expect(mockedGetUserSessionByToken).toHaveBeenCalledWith('abc123');
+    expect(mockedRes.status).not.toHaveBeenCalled();
+    expect(mockedRes.send).not.toHaveBeenCalled();
+    expect(mockedNext).toHaveBeenCalled();
+  });
+
+  test('should forward request if strict mode is disabled', async () => {
+    mockedGetUserSessionByToken.mockResolvedValue(undefined);
+
+    const mockedHeader = jest.fn().mockReturnValue('abc123');
+    const mockedReq = { header: mockedHeader } as unknown as Request;
+
+    await authorized(false)(mockedReq, mockedRes, mockedNext);
 
     expect(mockedHeader).toHaveBeenCalledWith('Authorization');
     expect(mockedGetUserSessionByToken).toHaveBeenCalledWith('abc123');
@@ -45,7 +60,7 @@ describe('authorized', () => {
     const mockedHeader = jest.fn().mockReturnValue(undefined);
     const mockedReq = { header: mockedHeader } as unknown as Request;
 
-    await authorized(mockedReq, mockedRes, mockedNext);
+    await authorized()(mockedReq, mockedRes, mockedNext);
 
     expect(mockedHeader).toHaveBeenCalledWith('Authorization');
     expect(mockedGetUserSessionByToken).not.toHaveBeenCalled();
@@ -63,7 +78,7 @@ describe('authorized', () => {
     const mockedHeader = jest.fn().mockReturnValue('abc123');
     const mockedReq = { header: mockedHeader } as unknown as Request;
 
-    await authorized(mockedReq, mockedRes, mockedNext);
+    await authorized()(mockedReq, mockedRes, mockedNext);
 
     expect(mockedHeader).toHaveBeenCalledWith('Authorization');
     expect(mockedGetUserSessionByToken).toHaveBeenCalledWith('abc123');

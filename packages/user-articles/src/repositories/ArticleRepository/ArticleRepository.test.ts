@@ -1,166 +1,122 @@
-import ArticleRepository from './ArticleRepository';
-import { Visibility } from '../../types/article';
+const mockedBeginsWith = jest.fn();
+const mockedCondition = jest.fn();
+const mockedEq = jest.fn();
+const mockedExec = jest.fn();
+const mockedFilter = jest.fn();
+const mockedModelCreate = jest.fn();
+const mockedModelQuery = jest.fn();
+const mockedUsing = jest.fn();
+const mockedWhere = jest.fn();
 
-const userSessionA = {
+import ArticleRepository from './ArticleRepository';
+import { Visibility } from '../../schemas/article';
+
+jest.mock('dynamoose', () => ({
+  Condition: mockedCondition,
+  model: () => ({
+    create: mockedModelCreate,
+    query: mockedModelQuery,
+  }),
+  Schema: jest.fn(),
+  Table: jest.fn(),
+}));
+
+const article = {
+  article_id: '10001',
+  content: 'Article #1 content',
+  title: 'Article #1',
+  visibility: Visibility.PRIVATE,
+};
+const userSession = {
   CreatedAt: '',
   Login: 'john.doe',
   Token: 'secret',
   UpdatedAt: '',
   UserId: '10001',
 };
-const userSessionB = {
-  CreatedAt: '',
-  Login: 'jake.doe',
-  Token: 'secret',
-  UpdatedAt: '',
-  UserId: '10002',
-};
 const articleRepository = ArticleRepository.getInstance();
 
-beforeAll(() => {
-  const fixtures = [
-    {
-      input: {
-        article_id: '10001',
-        title: 'Article #1',
-        content: 'Article #1 content',
-        visibility: Visibility.PUBLIC,
-      },
-      userSession: userSessionA,
-    },
-    {
-      input: {
-        article_id: '10002',
-        title: 'Article #2',
-        content: 'Article #2 content',
-        visibility: Visibility.LOGGED_IN,
-      },
-      userSession: userSessionA,
-    },
-    {
-      input: {
-        article_id: '10003',
-        title: 'Article #3',
-        content: 'Article #3 content',
-        visibility: Visibility.PRIVATE,
-      },
-      userSession: userSessionA,
-    },
-    {
-      input: {
-        article_id: '10004',
-        title: 'Article #4',
-        content: 'Article #4 content',
-        visibility: Visibility.PUBLIC,
-      },
-      userSession: userSessionB,
-    },
-    {
-      input: {
-        article_id: '10005',
-        title: 'Article #5',
-        content: 'Article #5 content',
-        visibility: Visibility.LOGGED_IN,
-      },
-      userSession: userSessionB,
-    },
-    {
-      input: {
-        article_id: '10006',
-        title: 'Article #6',
-        content: 'Article #6 content',
-        visibility: Visibility.PRIVATE,
-      },
-      userSession: userSessionB,
-    },
-  ];
-
-  fixtures.forEach(({ input, userSession }) => {
-    articleRepository.create(input, userSession);
-  });
-});
-
 describe('ArticleRepository', () => {
-  test('create should add a new item to record', () => {
-    articleRepository.create(
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    mockedCondition.mockReturnValue({
+      where: mockedWhere.mockReturnValue({
+        eq: mockedEq.mockReturnValue({
+          filter: mockedFilter.mockReturnValue({
+            beginsWith: mockedBeginsWith,
+          }),
+        }),
+      }),
+    });
+    mockedModelQuery.mockReturnValue({ exec: mockedExec, using: mockedUsing });
+    mockedUsing.mockReturnValue({ exec: mockedExec });
+  });
+
+  test('create should add a new item to record', async () => {
+    await articleRepository.create(article, userSession);
+
+    expect(mockedModelCreate).toHaveBeenCalledWith({
+      ArticleId: article.article_id,
+      Content: article.content,
+      Login: userSession.Login,
+      Title: article.title,
+      UserId: userSession.UserId,
+      Visibility: article.visibility,
+      sk: `ARTICLE#${article.article_id}`,
+    });
+  });
+
+  test('getPublicArticles should return articles with PUBLIC type visibility', async () => {
+    mockedExec.mockResolvedValue([
       {
-        article_id: '10007',
-        title: 'Article #7',
-        content: 'Article #7 content',
-        visibility: Visibility.PRIVATE,
+        ArticleId: article.article_id,
+        Content: article.content,
+        CreatedAt: '2025-02-14T14:41:07.095Z',
+        Login: userSession.Login,
+        Title: article.title,
+        UpdatedAt: '2025-02-14T14:41:07.095Z',
+        UserId: userSession.UserId,
+        Visibility: article.visibility,
+        sk: `ARTICLE#${article.article_id}`,
       },
-      userSessionB,
-    );
+    ]);
 
-    expect(articleRepository['records'].length).toEqual(7);
+    const result = await articleRepository.getPublicArticles();
+
+    expect(mockedModelQuery).toHaveBeenCalledWith({
+      Visibility: Visibility.PUBLIC,
+    });
+    expect(mockedUsing).toHaveBeenCalledWith('VisibilityGlobalIndex');
+    expect(result).toHaveLength(1);
   });
 
-  test('getPublicArticles should return articles with PUBLIC type visibility', () => {
-    const articles = articleRepository.getPublicArticles();
+  test('getUserArticles should return all user accessible articles', async () => {
+    mockedExec.mockResolvedValue([
+      {
+        ArticleId: article.article_id,
+        Content: article.content,
+        CreatedAt: '2025-02-14T14:41:07.095Z',
+        Login: userSession.Login,
+        Title: article.title,
+        UpdatedAt: '2025-02-14T14:41:07.095Z',
+        UserId: userSession.UserId,
+        Visibility: article.visibility,
+        sk: `ARTICLE#${article.article_id}`,
+      },
+    ]);
 
-    expect(articles.length).toEqual(2);
-    expect(articles).toEqual(
-      expect.arrayContaining([
-        {
-          article_id: '10001',
-          title: 'Article #1',
-          content: 'Article #1 content',
-          visibility: Visibility.PUBLIC,
-          user_id: '10001',
-        },
-        {
-          article_id: '10004',
-          title: 'Article #4',
-          content: 'Article #4 content',
-          visibility: Visibility.PUBLIC,
-          user_id: '10002',
-        },
-      ]),
-    );
-  });
+    await articleRepository.getUserArticles(userSession);
 
-  test('getUserArticles should return all user accessible articles', () => {
-    const articles = articleRepository.getUserArticles(userSessionA.UserId);
+    const result = await articleRepository.getPublicArticles();
 
-    expect(articles.length).toEqual(5);
-    expect(articles).toEqual(
-      expect.arrayContaining([
-        {
-          article_id: '10001',
-          title: 'Article #1',
-          content: 'Article #1 content',
-          visibility: Visibility.PUBLIC,
-          user_id: userSessionA.UserId,
-        },
-        {
-          article_id: '10002',
-          title: 'Article #2',
-          content: 'Article #2 content',
-          visibility: Visibility.LOGGED_IN,
-          user_id: userSessionA.UserId,
-        },
-        {
-          article_id: '10003',
-          title: 'Article #3',
-          content: 'Article #3 content',
-          visibility: Visibility.PRIVATE,
-          user_id: userSessionA.UserId,
-        },
-        {
-          article_id: '10004',
-          title: 'Article #4',
-          content: 'Article #4 content',
-          visibility: Visibility.PUBLIC,
-          user_id: userSessionB.UserId,
-        },
-        {
-          article_id: '10005',
-          title: 'Article #5',
-          content: 'Article #5 content',
-          visibility: Visibility.LOGGED_IN,
-          user_id: userSessionB.UserId,
-        },
-      ]),
-    );
+    expect(mockedModelQuery).toHaveBeenCalled();
+    expect(mockedCondition).toHaveBeenCalled();
+    expect(mockedWhere).toHaveBeenCalledWith('pk');
+    expect(mockedEq).toHaveBeenCalledWith(userSession.Login);
+    expect(mockedFilter).toHaveBeenCalledWith('sk');
+    expect(mockedBeginsWith).toHaveBeenCalledWith('ARTICLE');
+    expect(mockedUsing).toHaveBeenCalledWith('VisibilityGlobalIndex');
+    expect(result).toHaveLength(1);
   });
 });

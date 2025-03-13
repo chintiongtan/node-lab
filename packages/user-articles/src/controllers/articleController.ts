@@ -29,14 +29,23 @@ export async function create(
 }
 
 export async function list(req: Request, res: Response) {
+  const getPublicArticles = async () => {
+    res.status(200).json(await articleRepository.getPublicArticles());
+    return;
+  };
+
   const authToken = res.locals.token;
+
+  if (!authToken) {
+    return getPublicArticles();
+  }
+
   const userSession =
     await userSessionRepository.getUserSessionByToken(authToken);
 
-  if (!authToken || !userSession) {
-    res.status(200).json(articleRepository.getPublicArticles());
-    return;
+  if (!userSession) {
+    return getPublicArticles();
   }
 
-  res.status(200).json(articleRepository.getUserArticles(userSession.UserId));
+  res.status(200).json(await articleRepository.getUserArticles(userSession));
 }

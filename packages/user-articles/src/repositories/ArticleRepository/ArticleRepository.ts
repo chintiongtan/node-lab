@@ -1,49 +1,72 @@
+import { z } from 'zod';
+import { ArticleModel } from '../../models/article';
+import { articleSchema, Visibility } from '../../schemas/article';
 import { TCreateArticleRequest } from '../../types/api';
-import { Article, Visibility } from '../../types/article';
+import { TArticle } from '../../types/article';
 import { TUserSession } from '../../types/userSession';
+import { DynamoDbRepository } from '../DynamoDbRepository';
+import * as dynamoose from 'dynamoose';
 
-export default class ArticleRepository {
+export default class ArticleRepository extends DynamoDbRepository {
   private static instance: ArticleRepository;
-
-  private records: Array<Article>;
-
-  private constructor() {
-    this.records = [];
-  }
 
   public static getInstance(): ArticleRepository {
     if (!ArticleRepository.instance) {
-      ArticleRepository.instance = new ArticleRepository();
+      ArticleRepository.instance = new ArticleRepository(ArticleModel);
     }
 
     return ArticleRepository.instance;
   }
 
-  public create(
+  public async create(
     input: TCreateArticleRequest['body'],
     userSession: TUserSession,
-  ): void {
-    this.records.push({
-      article_id: input.article_id,
-      title: input.title,
-      content: input.content,
-      visibility: input.visibility,
-      user_id: userSession.UserId,
+  ): Promise<void> {
+    await this.model.create({
+      Login: userSession.Login,
+      sk: `ARTICLE#${input.article_id}`,
+      ArticleId: input.article_id,
+      Title: input.title,
+      Content: input.content,
+      UserId: userSession.UserId,
+      Visibility: input.visibility,
     });
   }
 
-  public getPublicArticles(): Array<Article> {
-    return this.records.filter(
-      (record) => record.visibility === Visibility.PUBLIC,
-    );
+  public async getPublicArticles(): Promise<Array<TArticle>> {
+    const result = await this.model
+      .query({ Visibility: Visibility.PUBLIC })
+      .using('VisibilityGlobalIndex')
+      .exec();
+
+    if (!result.length) {
+      return [];
+    }
+
+    const { data = [] } = z.array(articleSchema).safeParse(result);
+
+    return data;
   }
 
-  public getUserArticles(userId: string): Array<Article> {
-    return this.records.filter(
-      (record) =>
-        record.visibility === Visibility.PUBLIC ||
-        record.visibility === Visibility.LOGGED_IN ||
-        (record.visibility === Visibility.PRIVATE && record.user_id === userId),
-    );
+  public async getUserArticles(
+    userSession: TUserSession,
+  ): Promise<Array<TArticle>> {
+    const result = await this.model
+      .query(
+        new dynamoose.Condition()
+          .where('pk')
+          .eq(userSession.Login)
+          .filter('sk')
+          .beginsWith('ARTICLE'),
+      )
+      .exec();
+
+    if (!result.length) {
+      return [];
+    }
+
+    const { data = [] } = z.array(articleSchema).safeParse(result);
+
+    return data;
   }
 }
