@@ -33,14 +33,14 @@ export default class ArticleRepository extends DynamoDbRepository {
     });
   }
 
-  public async getPublicArticles(): Promise<Array<TArticle> | undefined> {
+  public async getPublicArticles(): Promise<Array<TArticle>> {
     const result = await this.model
       .query({ Visibility: Visibility.PUBLIC })
       .using('VisibilityGlobalIndex')
       .exec();
 
     if (!result.length) {
-      return undefined;
+      return [];
     }
 
     const { data = [] } = z.array(articleSchema).safeParse(result);
@@ -50,7 +50,7 @@ export default class ArticleRepository extends DynamoDbRepository {
 
   public async getUserArticles(
     userSession: TUserSession,
-  ): Promise<Array<TArticle> | undefined> {
+  ): Promise<Array<TArticle>> {
     const result = await this.model
       .query(
         new dynamoose.Condition()
@@ -62,7 +62,7 @@ export default class ArticleRepository extends DynamoDbRepository {
       .exec();
 
     if (!result.length) {
-      return undefined;
+      return [];
     }
 
     const { data = [] } = z.array(articleSchema).safeParse(result);
