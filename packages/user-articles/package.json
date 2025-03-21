@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "tsc --project tsconfig.build.json",
     "format": "eslint --fix",
     "lint": "eslint",
     "lint-staged": "lint-staged",
