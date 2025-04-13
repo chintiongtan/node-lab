@@ -6,6 +6,7 @@ const stackProps: TStackProps = {
     region: 'ap-southeast-1',
   },
   tags: {
+    'source:url': 'https://github.com/chintiongtan/node-labs',
     'system:name': 'user-articles',
   },
 };
