@@ -4,7 +4,7 @@ import * as cdk from 'aws-cdk-lib';
 import { TStage } from './types/stage';
 import { stageSchema } from './schemas/stage';
 import StageProps from './stage';
-import { AppStorageStack } from './stacks/app-storage-stack';
+import { AppStorageStack } from './stacks/appStorageStack';
 
 let stage: TStage;
 
