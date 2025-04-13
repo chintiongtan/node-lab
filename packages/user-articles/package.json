@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "cdk:deploy": "cdk deploy --progress events --require-approval never",
+    "cdk:deploy:staging": "pnpm cdk:deploy --context stage=staging",
     "format": "eslint --fix",
     "lint": "eslint",
     "lint-staged": "lint-staged",
@@ -26,6 +28,9 @@
     "@types/node": "^20.11.28",
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.8",
+    "aws-cdk": "^2.1007.0",
+    "aws-cdk-lib": "^2.189.0",
+    "constructs": "^10.4.2",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
