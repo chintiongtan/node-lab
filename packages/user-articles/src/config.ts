@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const environmentSchema = z.enum(['local', 'production']);
+const environmentSchema = z.enum(['local', 'production', 'test']);
 
 type TEnvironment = z.infer<typeof environmentSchema>;
 
@@ -20,6 +20,9 @@ const configs: Record<TEnvironment, () => Omit<TAppConfig, 'environment'>> = {
     ...common,
   }),
   production: () => ({
+    ...common,
+  }),
+  test: () => ({
     ...common,
   }),
 };
