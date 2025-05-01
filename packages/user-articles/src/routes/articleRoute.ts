@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post(
   '/',
-  [authorized, validateSchema(createArticleRequestSchema)],
+  [authorized(), validateSchema(createArticleRequestSchema)],
   create,
 );
 

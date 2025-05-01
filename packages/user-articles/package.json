@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "tsc --project tsconfig.build.json",
     "cdk:deploy": "cdk deploy --progress events --require-approval never",
     "cdk:deploy:staging": "pnpm cdk:deploy --context stage=staging",
     "format": "eslint --fix",
@@ -39,7 +40,8 @@
     "prettier": "^3.4.2",
     "superagent": "^8.1.2",
     "supertest": "^6.3.4",
-    "ts-jest": "^29.2.5",
+    "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.23.0"
   }

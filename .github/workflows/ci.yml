@@ -29,3 +29,5 @@ jobs:
         run: pnpm lerna run lint
       - name: Test
         run: pnpm lerna run test:ci
+      - name: Build
+        run: pnpm lerna run build

@@ -4,7 +4,7 @@ cdk.out/
 node_modules*/
 
 /coverage*/
-/dist*/
+/lib*/
 
 .DS_Store
 .eslintcache
