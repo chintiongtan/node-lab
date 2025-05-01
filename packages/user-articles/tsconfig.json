@@ -15,5 +15,5 @@
     "target": "ES2024"
   },
   "exclude": ["lib*/**/*"],
-  "extends": ["./tsconfig.base.json"]
+  "extends": "./tsconfig.base.json"
 }

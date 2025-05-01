@@ -1,3 +1,6 @@
+.vscode/*
+
+cdk.out/
 node_modules*/
 
 /coverage*/

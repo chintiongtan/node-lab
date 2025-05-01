@@ -1,0 +1,7 @@
+{
+  "app": "pnpm exec ts-node --prefer-ts-exts infra/index.ts",
+  "watch": {
+    "include": "src/**/*.ts",
+    "exclude": "src/**/*.test.ts"
+  }
+}
