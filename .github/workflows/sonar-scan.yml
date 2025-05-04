@@ -1,0 +1,47 @@
+name: Sonar Scan
+
+concurrency:
+  group: sonar-scan
+
+on:
+  push:
+    branches:
+      - feat/NLB-21/setup-sast # TODO: temp
+  workflow_dispatch:
+    inputs:
+      sonar_host_url:
+        default: true
+        description: 'SonarQube Server URL'
+        required: true
+        type: string
+
+env:
+  # SONAR_HOST_URL: ${{ inputs.sonar_host_url }}
+  SONAR_HOST_URL: https://602a-161-142-150-1.ngrok-free.app
+  SONAR_TOKEN: ${{ secrets.sonar_token}}
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Test
+        run: pnpm lerna run test:ci
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.1.0
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
