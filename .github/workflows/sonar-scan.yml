@@ -4,20 +4,15 @@ concurrency:
   group: sonar-scan
 
 on:
-  push:
-    branches:
-      - feat/NLB-21/setup-sast # TODO: temp
   workflow_dispatch:
     inputs:
       sonar_host_url:
-        default: true
         description: 'SonarQube Server URL'
         required: true
         type: string
 
 env:
-  # SONAR_HOST_URL: ${{ inputs.sonar_host_url }}
-  SONAR_HOST_URL: https://602a-161-142-150-1.ngrok-free.app
+  SONAR_HOST_URL: ${{ inputs.sonar_host_url }}
   SONAR_TOKEN: ${{ secrets.sonar_token}}
 
 jobs:
