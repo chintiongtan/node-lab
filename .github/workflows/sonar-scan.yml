@@ -49,4 +49,5 @@ jobs:
           SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
         with:
           args: >
+            -Dsonar.javascript.lcov.reportPaths=./packages/user-articles/coverage/lcov.info
             -Dsonar.projectKey=node-lab
